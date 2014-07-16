@@ -33,6 +33,10 @@
 #include <cstring>
 #include <string>
 
+//My insertion
+#include <map>
+using namespace std;
+
 #include "display/sp-canvas.h"
 #include "xml/node-event-vector.h"
 #include "sp-cursor.h"
@@ -1126,6 +1130,49 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
 }
 
 /**
+ * Additional function to work on Windows.
+ * Helps get_group0_keyval() to work properly.
+ *
+ * Returns the keyval of key in group 0 by it's hardware code
+ */
+guint get_group0_keyval_added(guint hardware_keycode) {
+	map<guint, guint> keys;
+	
+	keys[65] = GDK_KEY_a;
+	keys[66] = GDK_KEY_b;
+	keys[67] = GDK_KEY_c;
+	keys[68] = GDK_KEY_d;
+	keys[69] = GDK_KEY_e;
+	keys[70] = GDK_KEY_f;
+	keys[71] = GDK_KEY_g;
+	keys[72] = GDK_KEY_h;
+	keys[73] = GDK_KEY_i;
+	keys[74] = GDK_KEY_j;
+	keys[75] = GDK_KEY_k;
+	keys[76] = GDK_KEY_l;
+	keys[77] = GDK_KEY_m;
+	keys[78] = GDK_KEY_n;
+	keys[79] = GDK_KEY_o;
+	keys[80] = GDK_KEY_p;
+	keys[81] = GDK_KEY_q;
+	keys[82] = GDK_KEY_r;
+	keys[83] = GDK_KEY_s;
+	keys[84] = GDK_KEY_t;
+	keys[85] = GDK_KEY_u;
+	keys[86] = GDK_KEY_v;
+	keys[87] = GDK_KEY_w;
+	keys[88] = GDK_KEY_x;
+	keys[89] = GDK_KEY_y;
+	keys[90] = GDK_KEY_z;
+
+	if(keys.count(hardware_keycode) == 1) {
+		return keys[hardware_keycode];
+	} else {
+		return GDK_KEY_VoidSymbol;
+	}
+}
+
+/**
  * Return the keyval corresponding to the key event in group 0, i.e.,
  * in the main (English) layout.
  *
@@ -1134,13 +1181,23 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
  */
 guint get_group0_keyval(GdkEventKey const *event) {
     guint keyval = 0;
-
-    gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
-            gdk_display_get_default()), event->hardware_keycode,
-            (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
-            NULL, NULL, NULL);
-
-    return keyval;
+	
+    // gdk_keymap_translate_keyboard_state(
+			// gdk_keymap_get_default (),//gdk_keymap_get_for_display(gdk_display_get_default()),
+			// event->hardware_keycode,
+            // (GdkModifierType) event->state,
+			// 0 /*event->key.group*/,
+			// &keyval,
+            // NULL,
+			// NULL,
+			// NULL);
+	keyval = get_group0_keyval_added(event->hardware_keycode);
+	
+	if (keyval != GDK_KEY_VoidSymbol) {
+		return keyval;
+	} else {
+		return event->keyval;
+	}
 }
 
 /**
