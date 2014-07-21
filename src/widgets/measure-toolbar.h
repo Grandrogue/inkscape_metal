@@ -34,4 +34,5 @@ typedef struct _GObject GObject;
 
 void       sp_measure_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
 
+
 #endif /* !SEEN_MEASURE_TOOLBAR_H */

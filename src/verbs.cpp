@@ -1625,6 +1625,9 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_CONTEXT_MEASURE:
             tools_switch(dt, TOOLS_MEASURE);
             break;
+		case SP_VERB_CONTEXT_LAYOUT:
+            tools_switch(dt, TOOLS_LAYOUT);
+            break;
         case SP_VERB_CONTEXT_DROPPER:
             Inkscape::UI::Tools::sp_toggle_dropper(dt); // Functionality defined in event-context.cpp
             break;
@@ -1707,6 +1710,10 @@ void ContextVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_CONTEXT_MEASURE_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_MEASURE);
+            dt->_dlg_mgr->showDialog("InkscapePreferences");
+            break;
+		case SP_VERB_CONTEXT_LAYOUT_PREFS:
+            prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_LAYOUT);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
         case SP_VERB_CONTEXT_DROPPER_PREFS:
@@ -2677,6 +2684,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Zoom in or out"), INKSCAPE_ICON("zoom")),
     new ContextVerb(SP_VERB_CONTEXT_MEASURE, "ToolMeasure", NC_("ContextVerb", "Measure"),
                     N_("Measurement tool"), INKSCAPE_ICON("tool-measure")),
+	new ContextVerb(SP_VERB_CONTEXT_LAYOUT, "ToolLayout", NC_("ContextVerb", "Layout"),
+                    N_("Layoutment tool"), INKSCAPE_ICON("layout")),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "ToolDropper", NC_("ContextVerb", "Dropper"),
                     N_("Pick colors from image"), INKSCAPE_ICON("color-picker")),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR, "ToolConnector", NC_("ContextVerb", "Connector"),
@@ -2724,6 +2733,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Preferences for the Zoom tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_MEASURE_PREFS, "MeasurePrefs", N_("Measure Preferences"),
                     N_("Open Preferences for the Measure tool"), NULL),
+	new ContextVerb(SP_VERB_CONTEXT_LAYOUT_PREFS, "LayoutPrefs", N_("Layout Preferences"),
+                    N_("Open Preferences for the Layout tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
                     N_("Open Preferences for the Dropper tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
