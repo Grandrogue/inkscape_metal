@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Our nice measuring tool
  *
  * Authors:
@@ -308,6 +308,7 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
 bool MeasureTool::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+    bool isUnFixed = prefs->getBool("/tools/measure/isunfixed");
 
     gint ret = FALSE;
 
@@ -316,7 +317,13 @@ bool MeasureTool::root_handler(GdkEvent* event) {
             Geom::Point const button_w(event->button.x, event->button.y);
             explicitBase = boost::none;
             lastEnd = boost::none;
-            start_point = desktop->w2d(button_w);
+            if (!isUnFixed) {
+                double start_x_coord = prefs->getDouble("/tools/measure/measure_coord_action_x");
+                double start_y_coord = prefs->getDouble("/tools/measure/measure_coord_action_y");
+                start_point = Geom::Point(start_x_coord, start_y_coord);
+            } else {
+                start_point = desktop->w2d(button_w);
+            }
 
             if (event->button.button == 1 && !this->space_panning) {
                 // save drag origin

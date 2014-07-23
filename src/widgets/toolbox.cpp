@@ -342,6 +342,11 @@ static gchar const * ui_descr =
         "  </toolbar>"
 
         "  <toolbar name='MeasureToolbar'>"
+        "    <separator />"
+        "    <toolitem action='MeasureModeAction' />"
+        "    <toolitem action='MeasureCoordActionX' />"
+        "    <toolitem action='MeasureCoordActionY' />"
+        "    <separator />"
         "    <toolitem action='MeasureFontSizeAction' />"
         "    <separator />"
         "    <toolitem action='measure_units_label' />"
