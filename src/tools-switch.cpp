@@ -52,6 +52,7 @@
 #include "ui/tools/mesh-tool.h"
 #include "ui/tools/zoom-tool.h"
 #include "ui/tools/measure-tool.h"
+#include "ui/tools/layout-tool.h"
 #include "ui/tools/dropper-tool.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/tools/flood-tool.h"
@@ -79,6 +80,7 @@ static char const *const tool_names[] = {
     "/tools/mesh",
     "/tools/zoom",
     "/tools/measure",
+	"/tools/layout",
     "/tools/dropper",
     "/tools/connector",
     "/tools/paintbucket",

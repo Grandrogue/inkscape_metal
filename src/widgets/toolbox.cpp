@@ -97,9 +97,8 @@
 #include <gtk/gtk.h>
 
 #include "ui/tools/tool-base.h"
-
+static void       sp_layout_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
 //#define DEBUG_TEXT
-
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::PrefPusher;
@@ -145,6 +144,7 @@ static struct {
 	{ "/tools/spray",    "spray_tool",     SP_VERB_CONTEXT_SPRAY, SP_VERB_CONTEXT_SPRAY_PREFS },
 	{ "/tools/zoom",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM, SP_VERB_CONTEXT_ZOOM_PREFS },
 	{ "/tools/measure",  "measure_tool",   SP_VERB_CONTEXT_MEASURE, SP_VERB_CONTEXT_MEASURE_PREFS },
+	{ "/tools/layout",  "layout_tool",   SP_VERB_CONTEXT_LAYOUT, SP_VERB_CONTEXT_LAYOUT_PREFS },
 	{ "/tools/shapes/rect",     "rect_tool",      SP_VERB_CONTEXT_RECT, SP_VERB_CONTEXT_RECT_PREFS },
 	{ "/tools/shapes/3dbox",      "3dbox_tool",     SP_VERB_CONTEXT_3DBOX, SP_VERB_CONTEXT_3DBOX_PREFS },
 	{ "/tools/shapes/arc",      "arc_tool",       SP_VERB_CONTEXT_ARC, SP_VERB_CONTEXT_ARC_PREFS },
@@ -185,6 +185,8 @@ static struct {
     { "/tools/zoom",   "zoom_toolbox",   0, sp_zoom_toolbox_prep,              "ZoomToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/measure",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
+      SP_VERB_INVALID, 0, 0},
+    { "/tools/layout",   "layout_toolbox",   0, sp_layout_toolbox_prep,              "LayoutToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/shapes/star",   "star_toolbox",   0, sp_star_toolbox_prep,              "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
@@ -351,6 +353,12 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='measure_units_label' />"
         "    <toolitem action='MeasureUnitsAction' />"
+        "  </toolbar>"
+		"  <toolbar name='LayoutToolbar'>"
+        "    <toolitem action='LayoutFontSizeAction' />"
+        "    <separator />"
+        "    <toolitem action='layout_units_label' />"
+        "    <toolitem action='LayoutUnitsAction' />"
         "  </toolbar>"
 
         "  <toolbar name='StarToolbar'>"
@@ -1085,7 +1093,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     return act;
 }
 
-
 void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 {
     sigc::connection *conn = static_cast<sigc::connection*>(g_object_get_data(G_OBJECT(toolbox),
@@ -1277,7 +1284,7 @@ void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         "    <toolitem action='ToolTweak' />"
         "    <toolitem action='ToolZoom' />"
         "    <toolitem action='ToolMeasure' />"
-
+		"    <toolitem action='ToolLayout' />"
         "   <!-- Shapes -->"
         "    <toolitem action='ToolRect' />"
         "    <toolitem action='Tool3DBox' />"
@@ -1631,7 +1638,10 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
 
     DocumentUndo::setUndoSensitive(doc, saved);
 }
-
+static void sp_layout_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* /*mainActions*/, GObject* /*holder*/)
+{
+   // no custom GtkAction setup needed
+} // end of sp_measure_toolbox_prep()
 void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions(desktop);
